@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "folderId" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "Folder" ALTER COLUMN "id" DROP DEFAULT;

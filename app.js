@@ -66,16 +66,7 @@ app.post('/login', passport.authenticate('local', {
   
 }));
 
-app.get('/files', async (req, res) => {
-  
-  const file = await prisma.file.findMany({
-    // where: { id: '1' },
-    // include: { folder: true },
-  })
-  res.se
-  
-  
-})
+
 
 
   
