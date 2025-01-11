@@ -33,29 +33,29 @@ async function uploadFilePost(req, res) {
         }
     }
 
-async function getFileId(req, res) {
-    try {
-        const fileId = req.params.id;
-        const file = await prisma.file.findUnique({
-          where: { id: fileId },
-          include: { folder: true },
-        });
+// async function getFileId(req, res) {
+//     try {
+//         const fileId = req.params.fileId;
+//         const file = await prisma.file.findUnique({
+//           where: { fileId: fileId },
+//           include: { folder: true },
+//         });
     
-        if (!file) {
-          res.status(404).send('File not found');
-          return;
-        }
+//         if (!file) {
+//           res.status(404).send('File not found');
+//           return;
+//         }
     
-        res.render('files', {
-          file: file,
-          folderName: file.folder.foldername,
-        });
-      } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-      }
+//         res.render('files', {
+//           file: file,
+//            folderName: folder.foldername,
+//         });
+//       } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//       }
     
-    }
+//     }
 
 
 async function downloadFileGet(req, res) {
@@ -80,5 +80,5 @@ async function downloadFileGet(req, res) {
 
     
     
-module.exports = {  uploadFileGet, uploadFilePost, getFileId, downloadFileGet  };
+module.exports = {  uploadFileGet, uploadFilePost, downloadFileGet  };
     

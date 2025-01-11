@@ -50,25 +50,67 @@ async function uploadFileInFolderPost(req, res) {
 
 async function getFolderId(req, res) {
     try {
-            const folderId = req.params.id;
-            const foundFolder = await prisma.folder.findUnique({
-              where: { id: folderId },
+            const { id }= req.params;
+            const folder = await prisma.folder.findUnique({
+              where: { id },
             });
         
-            if (!foundFolder) {
+            if (!folder) {
               res.status(404).send('Folder not found');
               return;
             }
         
-            res.render('folders', {
-              folder: foundFolder,
-            });
+            res.json(folder);
+          
           } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
           }
     
     }
+
+    async function getFileId(req, res) {
+      try {
+          const { id } = req.params;
+          const file = await prisma.file.findUnique({
+            where: { id },
+            include: { folder: true },
+          });
+      
+          if (!file) {
+            res.status(404).send('File not found');
+            return;
+          }
+      
+          res.json(file);
+        } catch (error) {
+          console.error(error);
+          res.status(500).send('Internal Server Error');
+        }
+      
+      }
+  
+  
+
+    // exports.getPostById = async (req, res) => {
+    //   try {
+    //     const { id } = req.params;
+    //     const post = await prisma.post.findUnique({
+    //       where: { id },
+    //       include: { comments: true },
+    //     });
+    
+    //     if (!post) {
+    //       return res.status(404).json({ message: 'Post not found' });
+    //     }
+    //     // res.redirect('/api/post')
+    //     res.json(post);
+    //   } catch (err) {
+    //     console.error(err);
+    //     res.status(500).json({ message: 'Failed to retrieve post' });
+    //   }
+    // };
+    
 async function updateFolderId(req, res)  {
     try {
                 const id = (folder.id);
@@ -98,7 +140,7 @@ async function deleteFolderId(req, res) {
 
     
     
-module.exports = { getFolders, getFiles, uploadFileInFolderGet, uploadFileInFolderPost, getFolderId, updateFolderId, deleteFolderId  };
+module.exports = { getFolders, getFiles, uploadFileInFolderGet, uploadFileInFolderPost, getFolderId, getFileId, updateFolderId, deleteFolderId  };
     
 
 

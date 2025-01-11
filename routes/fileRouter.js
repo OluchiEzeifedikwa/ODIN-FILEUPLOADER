@@ -12,7 +12,7 @@ const fileController = require('../controllers/fileController')
 // fileRouter.get('/order', fileController.getFiles)
 fileRouter.get('/upload', fileController.uploadFileGet)
 fileRouter.post('/upload', upload.single('file'), fileController.uploadFilePost)
-fileRouter.get('/folder/:folderId/file/:fileId', fileController.getFileId)
+// fileRouter.get('/folder/:folderId/file/:fileId', fileController.getFileId)
 fileRouter.get('/folder/:folderId/file/:fileId/download', fileController.downloadFileGet)
 
 
