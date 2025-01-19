@@ -11,7 +11,7 @@ async function getFolders(req, res) {
 async function getFiles(req, res) {
   const file = await prisma.file.findMany({});
   console.log(file)
-  res.render('files', {files: file})
+  res.render('createFiles', {files: file})
   }
 
 // To get the file form
@@ -39,7 +39,7 @@ async function uploadFileInFolderPost(req, res) {
                 },
               });
             }));
-            res.redirect('/order');
+            res.redirect('/files');
             
             // res.send({ message: 'Folder created and files uploaded successfully!' });
           } catch (error) {
@@ -82,13 +82,41 @@ async function getFolderId(req, res) {
             return;
           }
       
-          res.json(file);
+          res.render('createFile', {
+            file: file,
+            foldername: file.folder.foldername,
+          });
         } catch (error) {
           console.error(error);
           res.status(500).send('Internal Server Error');
         }
       
       }
+
+
+
+      async function downloadFileGet(req, res) {
+        try {
+            
+            const { id } = req.params;
+            // const fileId = (file.id);
+            const file = await prisma.file.findUnique({
+              where: { id },
+              include: { folder: true },
+            });
+        
+            if (!file) {
+              res.status(404).send('File not found');
+              return;
+            }
+        
+            const filePath = `./uploads/${file.filename}`;
+            res.download(filePath, `${file.folder.foldername}_${file.filename}`);
+          } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+          }
+        }
   
   
 
@@ -140,7 +168,7 @@ async function deleteFolderId(req, res) {
 
     
     
-module.exports = { getFolders, getFiles, uploadFileInFolderGet, uploadFileInFolderPost, getFolderId, getFileId, updateFolderId, deleteFolderId  };
+module.exports = { getFolders, getFiles, uploadFileInFolderGet, uploadFileInFolderPost, getFolderId, downloadFileGet, getFileId, updateFolderId, deleteFolderId  };
     
 
 

@@ -4,16 +4,29 @@ const folder = require('./folderRouter');
 const multer = require('multer');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const upload = multer({ dest: './uploads/' });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filname: (req, file, cb) => {
+        console.log(file)
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({ storage: storage});
 const folderController = require('../controllers/folderController')
 
 
-folderRouter.get('/order', folderController.getFiles)   
-folderRouter.get('/out', folderController.getFolders)
+folderRouter.get('/files', folderController.getFiles)   
+folderRouter.get('/folders', folderController.getFolders)
 folderRouter.get('/folder', folderController.uploadFileInFolderGet)
-folderRouter.post('/folder', upload.array('uploads'), folderController.uploadFileInFolderPost)
-folderRouter.get('/out/:id', folderController.getFolderId)
-folderRouter.get('/order/:id', folderController.getFileId)
+// folderRouter.post('/folder', upload.array('uploads'), folderController.uploadFileInFolderPost)
+folderRouter.post('/folder', upload.single('image'), (req, res) =>{
+    res.send('image uploaded');
+})
+folderRouter.get('/folders/:id', folderController.getFolderId)
+folderRouter.get('/files/:id', folderController.getFileId)
+folderRouter.get('/files/:id/download', folderController.downloadFileGet)
 folderRouter.put('/folder/:id', folderController.updateFolderId)
 folderRouter.delete('/folder/:id', folderController.deleteFolderId)
 
