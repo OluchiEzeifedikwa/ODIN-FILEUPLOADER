@@ -11,12 +11,12 @@ async function getFolders(req, res) {
 async function getFiles(req, res) {
   const file = await prisma.file.findMany({});
   console.log(file)
-  res.render('createFiles', {files: file})
+  res.render('files', {files: file})
   }
 
 // To get the file form
-async function uploadFileInFolderGet(req, res) {
-    res.render('folder');
+async function folderFormGet(req, res) {
+    res.render('createFolder');
     }
 
 // To upload a file
@@ -47,7 +47,7 @@ async function uploadFileInFolderPost(req, res) {
             res.render({ message: 'Error creating folder or uploading files' });
           }
     }
-
+// To get folder Id
 async function getFolderId(req, res) {
     try {
             const { id }= req.params;
@@ -66,36 +66,30 @@ async function getFolderId(req, res) {
             console.error(error);
             res.status(500).send('Internal Server Error');
           }
-    
+}
+//To get file Id
+async function getFileId(req, res) {
+  try {
+    const { id } = req.params;
+    const file = await prisma.file.findUnique({
+      where: { id },
+      include: { folder: true },
+    });
+    if (!file) {
+      res.status(404).send('File not found');
+      return;
     }
-
-    async function getFileId(req, res) {
-      try {
-          const { id } = req.params;
-          const file = await prisma.file.findUnique({
-            where: { id },
-            include: { folder: true },
-          });
-      
-          if (!file) {
-            res.status(404).send('File not found');
-            return;
-          }
-      
-          res.render('createFile', {
-            file: file,
-            foldername: file.folder.foldername,
-          });
-        } catch (error) {
-          console.error(error);
-          res.status(500).send('Internal Server Error');
-        }
-      
-      }
-
-
-
-      async function downloadFileGet(req, res) {
+    res.render('file', {
+      file: file,
+      foldername: file.folder.foldername,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+// To download file
+async function downloadFileGet(req, res) {
         try {
             
             const { id } = req.params;
@@ -118,27 +112,7 @@ async function getFolderId(req, res) {
           }
         }
   
-  
-
-    // exports.getPostById = async (req, res) => {
-    //   try {
-    //     const { id } = req.params;
-    //     const post = await prisma.post.findUnique({
-    //       where: { id },
-    //       include: { comments: true },
-    //     });
-    
-    //     if (!post) {
-    //       return res.status(404).json({ message: 'Post not found' });
-    //     }
-    //     // res.redirect('/api/post')
-    //     res.json(post);
-    //   } catch (err) {
-    //     console.error(err);
-    //     res.status(500).json({ message: 'Failed to retrieve post' });
-    //   }
-    // };
-    
+ // To update Folder   
 async function updateFolderId(req, res)  {
     try {
                 const id = (folder.id);
@@ -153,7 +127,7 @@ async function updateFolderId(req, res)  {
               }
 
     }
-
+// To delete folder
 async function deleteFolderId(req, res) {
     try {
             const id = (folder.id);
@@ -164,11 +138,8 @@ async function deleteFolderId(req, res) {
           }
 
     }
-
-
-    
-    
-module.exports = { getFolders, getFiles, uploadFileInFolderGet, uploadFileInFolderPost, getFolderId, downloadFileGet, getFileId, updateFolderId, deleteFolderId  };
+   
+module.exports = { getFolders, getFiles, folderFormGet, uploadFileInFolderPost, getFolderId, downloadFileGet, getFileId, updateFolderId, deleteFolderId  };
     
 
 

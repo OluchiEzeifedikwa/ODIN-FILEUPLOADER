@@ -1,0 +1,12 @@
+<% files.forEach(file => { %>
+   <li>
+      <h2><%= file.filename%></h2>
+      <p>File Size: <%= file.filesize %> bytes</p>
+      <p>Upload Time: <%= file.createdAt %></p>
+      <button>
+         <a href="/file/<%= (file.id) %>/download">Download File</a>
+      </button>
+   </li>
+<% }); %>
+
+      

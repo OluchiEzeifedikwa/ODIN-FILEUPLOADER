@@ -11,9 +11,8 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const upload = multer({ dest: './uploads/' });
 const auth = require('./routes/auth');
-const fileRouter = require('./routes/fileRouter');
+// const fileRouter = require('./routes/fileRouter');
 const folderRouter = require('./routes/folderRouter');
-
 
 
 app.set("views", path.join(__dirname, "views"));
@@ -31,7 +30,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(auth);
-app.use(fileRouter);
+// app.use(fileRouter);
 app.use(folderRouter);
 
 
@@ -46,7 +45,6 @@ app.get('/login', (req, res) => {
 app.get('/signup', (req, res) => {
   res.render('signup');
 })
-
 
 
 app.post('/signup', async(req, res) => {
@@ -65,74 +63,6 @@ app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login',
   
 }));
-
-
-
-
-  
-// app.get('/file', (req, res) => {
-//   res.render('file');
-//   // if (req.isAuthenticated()) {
-//   //   res.send('Welcome, ' + req.user.username);
-//   // } else {
-//   //   res.redirect('/login');
-//   // }
-// });
-
-// app.post('/file', upload.single('file'), async (req, res) => {
-//   try {
-//     const file = req.file;
-//     const filename = file.originalname;
-
-//     // Save the file to the database
-//     await prisma.file.create({
-//       data: {
-//         filename: filename,
-//       },
-//     });
-//     res.render('/');
-//     res.send('File Uploaded Successfully');
-//   } catch (error) {
-//     console.error(error);
-//     res.render('file', { error: 'Internal Server Error' });
-//   }
-// });
-
-// app.get('/folder', (req, res) => {
-//   res.render('folder');
-
-// });
-
-
-
-// app.post('/folder', upload.array('uploads'), async (req, res) => {
-//   try {
-//     const { foldername } = req.body;
-//     const files = req.files;
-
-//     const folder = await prisma.folder.create({
-//       data: {
-//         foldername
-//       },
-//     });
-
-//     await Promise.all(files.map(async (file) => {
-//       await prisma.file.create({
-//         data: {
-//           filename: file.originalname,
-//           folderId: (folder.id),
-//         },
-//       });
-//     }));
-//     res.send({ message: 'Folder created and files uploaded successfully!' });
-//   } catch (error) {
-//     console.error(error);
-//     res.render({ message: 'Error creating folder or uploading files' });
-//   }
-// });
-
-
-
 
 
 const PORT = process.env.PORT || 3000;

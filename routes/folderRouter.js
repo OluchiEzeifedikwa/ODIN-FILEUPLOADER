@@ -19,7 +19,7 @@ const folderController = require('../controllers/folderController')
 
 folderRouter.get('/files', folderController.getFiles)   
 folderRouter.get('/folders', folderController.getFolders)
-folderRouter.get('/folder', folderController.uploadFileInFolderGet)
+folderRouter.get('/folder', folderController.folderFormGet)
 // folderRouter.post('/folder', upload.array('uploads'), folderController.uploadFileInFolderPost)
 folderRouter.post('/folder', upload.single('image'), (req, res) =>{
     res.send('image uploaded');
